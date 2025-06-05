@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Zenith - Settings</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+      /* Animações from index.html (mantidas para consistência e possível uso futuro) */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes glow {
+        0%,
+        100% {
+          box-shadow: 0 0 20px rgba(12, 127, 242, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 30px rgba(12, 127, 242, 0.6);
+        }
+      }
+
+      /* Classes de animação */
+      .animate-fadeInUp {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      .animate-fadeInDown {
+        animation: fadeInDown 0.8s ease-out forwards;
+      }
+
+      /* Inicialmente ocultos para animação */
+      .fade-element {
+        opacity: 0;
+      }
+
+      /* Botões com efeitos de hover */
+      .btn-primary {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #0c7ff2, #0a6bd8);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        animation: glow 2s infinite;
+      }
+
+      .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn-primary:hover::before {
+        left: 100%;
+      }
+
+      .btn-danger {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #dc3545, #c82333);
+      }
+
+      .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+      }
+
+      .btn-secondary {
+        background-color: #f0f2f5;
+        color: #111518;
+        transition: all 0.3s ease;
+      }
+
+      .dark-theme .btn-secondary {
+        background-color: #4a4a5e;
+        color: #fff;
+      }
+
+      .btn-secondary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+      }
+
+      .btn-disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+        background-color: #cccccc !important;
+        color: #666666 !important;
+      }
+
+      /* Settings card with animations */
+      .settings-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .settings-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 12px 48px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Theme toggle switch */
+      .theme-switch {
+        position: relative;
+        width: 60px;
+        height: 30px;
+        border-radius: 15px;
+        background: #f0f2f5;
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+
+      .theme-switch.dark {
+        background: #3a3a3a;
+      }
+
+      .theme-switch::after {
+        content: '';
+        position: absolute;
+        top: 2px;
+        left: 2px;
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background: #fff;
+        transition: all 0.3s ease;
+      }
+
+      .theme-switch.dark::after {
+        transform: translateX(30px);
+        background: #0c7ff2;
+      }
+
+      /* Modal styles */
+      .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        backdrop-filter: blur(5px);
+        z-index: 1000;
+      }
+
+      .modal-content {
+        position: relative;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        background: white;
+        padding: 2rem;
+        border-radius: 20px;
+        max-width: 400px;
+        animation: fadeInUp 0.3s ease;
+      }
+
+      /* Input styles for forms */
+      .form-input {
+        border: 1px solid #e0e0e0;
+        padding: 0.75rem 1rem;
+        font-size: 1rem;
+      }
+
+      /* Dark theme styles - IMPORTANT: This is where the background gradient is defined */
+      .dark-theme {
+        background: linear-gradient(to bottom right, #1f2937, #111827); /* Same as Dashboard's dark theme */
+        color: #fff; /* Default text color for dark theme */
+      }
+
+      /* Adjust specific text colors for dark theme */
+      .dark-theme .text-gray-600 {
+        color: #bbb;
+      }
+      .dark-theme .text-[#111518] {
+        color: #fff;
+      }
+      .dark-theme .text-[#60768a] {
+        color: #ccc;
+      }
+
+      /* Adjust background of cards and modals in dark theme */
+      .dark-theme .settings-card {
+        background: rgba(0, 0, 0, 0.3); /* Darker transparent background for cards */
+        border-color: rgba(255, 255, 255, 0.1);
+        box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3); /* Adjusted shadow for dark mode */
+      }
+
+      .dark-theme .modal-content {
+        background: #2a2a3e; /* Darker background for modals */
+        color: white;
+      }
+
+      /* Ensure form inputs are visible in dark mode */
+      .dark-theme .form-input {
+        background-color: #3a3a3a;
+        border-color: rgba(255, 255, 255, 0.2);
+        color: #fff;
+      }
+    </style>
+  </head>
+  <body class="bg-gradient-to-br from-blue-50 to-indigo-100 transition-all duration-500">
+    <div
+      class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden"
+      style='font-family: Inter, "Noto Sans", sans-serif;'
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <div id="topbar-placeholder"></div>
+
+        <div class="px-40 flex flex-1 justify-center py-5">
+          <div
+            class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 max-w-[960px] flex-1"
+          >
+            <div class="flex flex-wrap justify-between gap-3 p-4">
+              <p
+                class="text-[#111518] tracking-light text-[32px] font-bold leading-tight min-w-72"
+              >
+                Settings
+              </p>
+            </div>
+            <h3
+              class="text-[#111518] text-lg font-bold leading-tight tracking-[-0.015em] px-4 pb-2 pt-4"
+            >
+              Account
+            </h3>
+            <div class="settings-card flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between mb-4 animate-fadeInUp">
+              <div class="flex flex-col justify-center">
+                <p class="text-[#111518] text-base font-medium leading-normal line-clamp-1">
+                  Password
+                </p>
+                <p class="text-gray-600 text-sm font-normal leading-normal line-clamp-2">
+                  Change your password
+                </p>
+              </div>
+              <div class="shrink-0">
+                <button
+                  class="btn-primary px-4 py-2 rounded-full"
+                  onclick="openModal('passwordModal')"
+                >
+                  <span class="truncate">Change</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="settings-card flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between mb-4 animate-fadeInUp">
+              <div class="flex flex-col justify-center">
+                <p class="text-[#111518] text-base font-medium leading-normal line-clamp-1">
+                  Verify
+                </p>
+                <p class="text-gray-600 text-sm font-normal leading-normal line-clamp-2">
+                  Verify your account
+                </p>
+              </div>
+              <div class="shrink-0 flex flex-col items-center gap-1">
+                <p id="verificationStatusText" class="text-xs text-gray-500">Status</p>
+                <div class="flex items-center gap-1">
+                  <div id="verificationIcon" class="size-4">
+                  </div>
+                  <button
+                    id="verifyButton"
+                    class="btn-primary px-4 py-2 rounded-full"
+                  >
+                    <span class="truncate">Verify</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+            <div class="settings-card flex items-center gap-4 px-4 min-h-[72px] py-2 justify-between mb-4 animate-fadeInUp">
+              <div class="flex flex-col justify-center">
+                <p class="text-[#111518] text-base font-medium leading-normal line-clamp-1">
+                  Delete Account
+                </p>
+                <p class="text-gray-600 text-sm font-normal leading-normal line-clamp-2">
+                  Delete your account
+                </p>
+              </div>
+              <div class="shrink-0">
+                <button
+                  class="btn-danger px-4 py-2 rounded-full"
+                  onclick="openModal('deleteModal')"
+                >
+                  <span class="truncate">Delete</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="settings-card p-4 mb-4 animate-fadeInUp">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h3 class="text-lg font-bold text-[#111518]">Theme</h3>
+                  <p class="text-sm text-gray-600">Toggle between light and dark theme</p>
+                </div>
+                <div class="theme-switch" id="themeToggle"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="passwordModal" class="modal">
+      <div class="modal-content">
+        <h3 class="text-xl font-bold mb-4 text-[#111518]">Change Password</h3>
+        <form id="passwordForm" class="space-y-4">
+          <div>
+            <label class="block text-sm font-medium mb-1 text-[#111518]">Current Password</label>
+            <input type="password" id="currentPassword" class="form-input w-full rounded" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 text-[#111518]">New Password</label>
+            <input type="password" id="newPassword" class="form-input w-full rounded" required />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-1 text-[#111518]">Confirm New Password</label>
+            <input type="password" id="confirmPassword" class="form-input w-full rounded" required />
+          </div>
+          <div class="flex justify-end gap-2 mt-4">
+            <button type="button" class="btn-secondary px-4 py-2 rounded" onclick="closeModal('passwordModal')">Cancel</button>
+            <button type="submit" class="btn-primary px-4 py-2 rounded">Change Password</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <div id="deleteModal" class="modal">
+      <div class="modal-content">
+        <h3 class="text-xl font-bold mb-4 text-red-600">Delete Account</h3>
+        <p class="mb-4 text-[#111518]">Are you sure you want to delete your account? This action cannot be undone.</p>
+        <div class="flex justify-end gap-2">
+          <button class="btn-secondary px-4 py-2 rounded" onclick="closeModal('deleteModal')">Cancel</button>
+          <button class="btn-danger px-4 py-2 rounded" onclick="confirmDelete()">Delete Account</button>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+      import {
+        getAuth,
+        onAuthStateChanged,
+        sendEmailVerification,
+        reload,
+        EmailAuthProvider,
+        reauthenticateWithCredential,
+        updatePassword,
+        deleteUser,
+      } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+      // Sua configuração do Firebase
+      const firebaseConfig = {
+        apiKey: "AIzaSyBOaX0w3QCpLkuaAp7XNYspZkCxxu2sklA",
+        authDomain: "znotes-94da5ec4.firebaseapp.com",
+        projectId: "znotes-94da5ec4",
+        storageBucket: "znotes-94da5ec4.firebasestorage.app",
+        messagingSenderId: "886687981244",
+        appId: "1:886687981244:web:a56fe5db902a2f9d7f7ab9",
+      };
+
+      // Inicializa o Firebase
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // Elementos da UI
+      const verificationStatusText = document.getElementById("verificationStatusText");
+      const verificationIcon = document.getElementById("verificationIcon");
+      const verifyButton = document.getElementById("verifyButton");
+      const themeToggle = document.getElementById('themeToggle'); // O elemento 'theme-switch'
+
+      // Função para carregar a top bar
+      async function loadTopbar() {
+        try {
+          const response = await fetch("topbar.html"); // Certifique-se que o caminho está correto
+          const data = await response.text();
+          document.getElementById("topbar-placeholder").innerHTML = data;
+        } catch (error) {
+          console.error("Erro ao carregar a top bar:", error);
+        }
+      }
+
+      // Função para inicializar as animações na página
+      function initializeAnimations() {
+        const fadeElements = document.querySelectorAll('.fade-element');
+        fadeElements.forEach((element, index) => {
+          setTimeout(() => {
+            element.style.opacity = '1';
+          }, index * 200); // Animação escalonada
+        });
+      }
+
+      // Função para atualizar o status de verificação na UI
+      function updateVerificationStatus(isVerified) {
+        if (isVerified) {
+          verificationStatusText.textContent = "Verificado";
+          verificationStatusText.classList.remove("text-red-500");
+          verificationStatusText.classList.add("text-green-600"); // Cor verde para verificado
+
+          verificationIcon.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#22C55E" viewBox="0 0 256 256">
+              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm45.66,85.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.68l50.34-50.34a8,8,0,0,1,11.32,11.32Z"></path>
+            </svg>
+          `; // Círculo verde com certo
+
+          verifyButton.disabled = true;
+          verifyButton.classList.add("btn-disabled"); // Aplica classe de cinza escuro
+          verifyButton.classList.remove("bg-[#0c7ff2]", "text-white"); // Remove estilos de ativo
+        } else {
+          verificationStatusText.textContent = "Não verificado";
+          verificationStatusText.classList.remove("text-green-600");
+          verificationStatusText.classList.add("text-red-500"); // Cor vermelha para não verificado
+
+          verificationIcon.innerHTML = `
+            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#EF4444" viewBox="0 0 256 256">
+              <path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24ZM181.66,181.66a8,8,0,0,1-11.32,0L128,139.31l-42.34,42.35a8,8,0,0,1-11.32-11.32L116.69,128,74.34,85.66a8,8,0,0,1,11.32-11.32L128,116.69l42.34-42.35a8,8,0,0,1,11.32,11.32L139.31,128Z"></path>
+            </svg>
+          `; // Círculo vermelho com X
+
+          verifyButton.disabled = false;
+          verifyButton.classList.remove("btn-disabled"); // Remove classe de desabilitado
+          verifyButton.classList.add("bg-[#0c7ff2]", "text-white"); // Aplica estilos de ativo
+        }
+      }
+
+      // Função para carregar e aplicar o tema (claro/escuro)
+      function loadTheme() {
+        const theme = localStorage.getItem('theme') || 'light'; // Obtém o tema do localStorage, default para 'light'
+
+        if (theme === 'dark') {
+          document.body.classList.add('dark-theme');
+          document.body.classList.remove('bg-gradient-to-br', 'from-blue-50', 'to-indigo-100');
+          themeToggle.classList.add('dark');
+        } else {
+          document.body.classList.remove('dark-theme');
+          document.body.classList.add('bg-gradient-to-br', 'from-blue-50', 'to-indigo-100');
+          themeToggle.classList.remove('dark');
+        }
+      }
+
+      // Theme management: Listener para o toggle switch
+      themeToggle.addEventListener('click', () => {
+        const currentTheme = localStorage.getItem('theme') || 'light';
+        const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+        localStorage.setItem('theme', newTheme);
+        loadTheme(); // Chama loadTheme para aplicar as mudanças
+      });
+
+      // Modal management
+      window.openModal = (modalId) => {
+        document.getElementById(modalId).style.display = 'block';
+      };
+
+      window.closeModal = (modalId) => {
+        document.getElementById(modalId).style.display = 'none';
+      };
+
+      // Password change
+      document.getElementById('passwordForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const user = auth.currentUser;
+        const currentPassword = document.getElementById('currentPassword').value;
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (newPassword !== confirmPassword) {
+          alert('New passwords do not match');
+          return;
+        }
+
+        try {
+          const credential = EmailAuthProvider.credential(
+            user.email,
+            currentPassword
+          );
+          await reauthenticateWithCredential(user, credential);
+          await updatePassword(user, newPassword);
+          alert('Password updated successfully');
+          closeModal('passwordModal');
+        } catch (error) {
+          alert('Error: ' + error.message);
+        }
+      });
+
+      // Delete account
+      window.confirmDelete = async () => {
+        const user = auth.currentUser;
+        try {
+          await deleteUser(user);
+          window.location.href = 'index.html'; // Redireciona após exclusão
+        } catch (error) {
+          alert('Error: ' + error.message);
+        }
+      };
+
+      // Listener para o estado de autenticação
+      onAuthStateChanged(auth, async (user) => {
+        if (user) {
+          // Usuário está logado
+          // Força o recarregamento do usuário para obter o status de verificação mais recente
+          await reload(user);
+          updateVerificationStatus(user.emailVerified);
+        } else {
+          // Usuário não está logado, redirecionar para a página de login
+          window.location.href = "index.html";
+        }
+      });
+
+      // Listener para o botão de verificação
+      verifyButton.addEventListener("click", async () => {
+        const user = auth.currentUser;
+        if (user && !user.emailVerified) {
+          try {
+            await sendEmailVerification(user);
+            alert("E-mail de verificação enviado! Por favor, verifique sua caixa de entrada.");
+            // O usuário precisará recarregar a página ou fazer login novamente
+            // após verificar o e-mail para que o status seja atualizado.
+          } catch (error) {
+            console.error("Erro ao enviar e-mail de verificação:", error);
+            alert("Erro ao enviar e-mail de verificação: " + error.message);
+          }
+        }
+      });
+
+      // Chama as funções no carregamento da página
+      document.addEventListener("DOMContentLoaded", () => {
+        loadTopbar();
+        loadTheme(); // Carrega o tema primeiro
+        initializeAnimations();
+      });
+    </script>
+  </body>
+</html>

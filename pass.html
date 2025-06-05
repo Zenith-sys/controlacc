@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&amp;family=Inter%3Awght%40400%3B500%3B700%3B900&amp;family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Zenith - Reset Password</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+      /* Animações de entrada suaves */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes glow {
+        0%, 100% {
+          box-shadow: 0 0 20px rgba(12, 127, 242, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 30px rgba(12, 127, 242, 0.6);
+        }
+      }
+
+      @keyframes shimmer {
+        0% {
+          background-position: -200% 0;
+        }
+        100% {
+          background-position: 200% 0;
+        }
+      }
+
+      /* Classes de animação */
+      .animate-fade-in-up {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      .animate-fade-in-down {
+        animation: fadeInDown 0.8s ease-out forwards;
+      }
+
+      .animate-slide-in-left {
+        animation: slideInLeft 0.8s ease-out forwards;
+      }
+
+      .animate-delay-1 {
+        animation-delay: 0.2s;
+      }
+
+      .animate-delay-2 {
+        animation-delay: 0.4s;
+      }
+
+      .animate-delay-3 {
+        animation-delay: 0.6s;
+      }
+
+      .animate-delay-4 {
+        animation-delay: 0.8s;
+      }
+
+      /* Inicialmente ocultos para animação */
+      .fade-element {
+        opacity: 0;
+      }
+
+      /* Botão com efeito hover melhorado */
+      .action-btn {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #0c7ff2, #0a6bd8);
+      }
+
+      .action-btn:hover {
+        transform: translateY(-2px);
+        animation: glow 2s infinite;
+      }
+
+      .action-btn:active {
+        transform: translateY(0);
+      }
+
+      .action-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .action-btn:hover::before {
+        left: 100%;
+      }
+
+      /* Inputs com animações melhoradas */
+      .form-input {
+        transition: all 0.3s ease;
+        background: rgba(240, 242, 245, 0.8);
+        backdrop-filter: blur(10px);
+      }
+
+      .form-input:focus {
+        transform: scale(1.02);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 8px 25px rgba(12, 127, 242, 0.15);
+      }
+
+      /* Links com hover melhorado */
+      .hover-link {
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .hover-link:hover {
+        color: #0c7ff2;
+        transform: translateY(-1px);
+      }
+
+      .hover-link::after {
+        content: '';
+        position: absolute;
+        width: 0;
+        height: 2px;
+        bottom: -2px;
+        left: 50%;
+        background: linear-gradient(90deg, #0c7ff2, #8c8ff1);
+        transition: all 0.3s ease;
+        transform: translateX(-50%);
+      }
+
+      .hover-link:hover::after {
+        width: 100%;
+      }
+
+      /* Header logo com animação */
+      .logo-container {
+        transition: all 0.3s ease;
+      }
+
+      .logo-container:hover {
+        transform: scale(1.1) rotate(5deg);
+      }
+
+      /* Container principal com glassmorphism */
+      .auth-container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .auth-container:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Estilo para a mensagem de feedback */
+      #feedbackMessage {
+        color: #fff;
+        text-align: center;
+        margin-top: 10px;
+        font-weight: bold;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: all 0.3s ease;
+      }
+
+      #feedbackMessage.show {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      .bouncing-blobs-container {
+        position: fixed;
+        z-index: -1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .bouncing-blobs-glass {
+        position: absolute;
+        z-index: 2;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backdrop-filter: blur(140px);
+        -webkit-backdrop-filter: blur(140px);
+        pointer-events: none;
+      }
+
+      .bouncing-blobs {
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+      }
+
+      .bouncing-blob {
+        width: 32vw;
+        aspect-ratio: 1;
+        border-radius: 50%;
+        will-change: transform;
+        position: absolute;
+        z-index: 1;
+        top: 0;
+        left: 0;
+        transform-origin: left top;
+        filter: blur(1px);
+        opacity: 0.8;
+      }
+
+      .bouncing-blob--blue {
+        background: linear-gradient(135deg, #4783c7, #5a94d4);
+      }
+
+      .bouncing-blob--white {
+        background: radial-gradient(circle, #ffffff, #f0f8ff);
+        z-index: 2;
+        width: 15vw;
+      }
+
+      .bouncing-blob--purple {
+        background: linear-gradient(135deg, #8c8ff1, #a29bfb);
+      }
+
+      .bouncing-blob--pink {
+        background: linear-gradient(135deg, #e289cd50, #f0a1d780);
+      }
+
+      @media (max-width: 1200px) {
+        .bouncing-blobs-glass {
+          backdrop-filter: blur(120px);
+          -webkit-backdrop-filter: blur(120px);
+        }
+      }
+
+      @media (max-width: 500px) {
+        .bouncing-blob {
+          width: 60vw;
+        }
+        .bouncing-blob--white {
+          width: 30vw;
+        }
+        .bouncing-blobs-glass {
+          backdrop-filter: blur(90px);
+          -webkit-backdrop-filter: blur(90px);
+        }
+      }
+    </style>
+  </head>
+
+  <body style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+    <div class="bouncing-blobs-container">
+      <div class="bouncing-blobs-glass"></div>
+      <div class="bouncing-blobs">
+        <div class="bouncing-blob bouncing-blob--blue"></div>
+        <div class="bouncing-blob bouncing-blob--blue"></div>
+        <div class="bouncing-blob bouncing-blob--blue"></div>
+        <div class="bouncing-blob bouncing-blob--white"></div>
+        <div class="bouncing-blob bouncing-blob--purple"></div>
+        <div class="bouncing-blob bouncing-blob--purple"></div>
+        <div class="bouncing-blob bouncing-blob--pink"></div>
+      </div>
+    </div>
+
+    <div
+      class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden"
+      style='font-family: Inter, "Noto Sans", sans-serif;'
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <header
+          class="fade-element animate-fade-in-down flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[rgba(255,255,255,0.2)] px-10 py-3 backdrop-blur-sm"
+        >
+          <div class="flex items-center gap-4 text-white logo-container">
+            <div class="size-4">
+              <img src="zlogob.png" alt="Zenith Logo" class="h-full w-full object-contain" />
+            </div>
+            <h2 class="text-white text-lg font-bold leading-tight tracking-[-0.015em]">
+              Zenith
+            </h2>
+          </div>
+        </header>
+
+        <div class="flex flex-1 justify-center items-center py-5">
+          <div class="fade-element animate-fade-in-up animate-delay-1 auth-container p-8 m-4">
+            <div
+              class="layout-content-container flex flex-col w-[512px] max-w-[512px] py-5 flex-1 items-center"
+            >
+              <h2
+                class="text-white tracking-light text-[32px] font-bold leading-tight px-4 text-center pb-6 pt-2"
+              >
+                Reset your password
+              </h2>
+              
+              <div class="fade-element animate-fade-in-up animate-delay-2 flex max-w-[480px] w-full flex-wrap items-end justify-center gap-4 px-4 py-3">
+                <label class="flex flex-col min-w-40 flex-1">
+                  <input
+                    placeholder="Enter your email"
+                    class="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-[#111418] focus:outline-0 focus:ring-0 border-none focus:border-none h-14 placeholder:text-[#60758a] p-4 text-base font-normal leading-normal"
+                    id="reset-email"
+                    type="email"
+                  />
+                </label>
+              </div>
+
+              <div id="feedbackMessage" class="text-center mt-4 opacity-0 transition-opacity duration-300"></div>
+
+              <button
+                id="reset-password-btn"
+                class="fade-element animate-fade-in-up animate-delay-3 action-btn flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 text-white text-sm font-bold leading-normal tracking-[0.015em] mt-6"
+              >
+                <span class="truncate">Send Reset Email</span>
+              </button>
+
+              <div class="fade-element animate-slide-in-left animate-delay-4 flex justify-center w-full max-w-[480px] px-4 py-2 mt-4">
+                <a href="index.html" class="text-white text-sm font-medium leading-normal hover-link">
+                  Back to Login
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+      import { getAuth, sendPasswordResetEmail } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+      const firebaseConfig = {
+    apiKey: "AIzaSyBOaX0w3QCpLkuaAp7XNYspZkCxxu2sklA", 
+    authDomain: "znotes-94da5ec4.firebaseapp.com",
+    projectId: "znotes-94da5ec4",
+    storageBucket: "znotes-94da5ec4.firebasestorage.app",
+    messagingSenderId: "886687981244",
+    appId: "1:886687981244:web:a56fe5db902a2f9d7f7ab9",
+};
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+
+      // Initialize animations
+      function initializeAnimations() {
+        const fadeElements = document.querySelectorAll('.fade-element');
+        fadeElements.forEach((element, index) => {
+          setTimeout(() => {
+            element.style.opacity = '1';
+          }, index * 200);
+        });
+      }
+
+      // Show feedback message
+      function showFeedbackMessage(message, type = 'success') {
+        const feedbackMessageElement = document.getElementById('feedbackMessage');
+        feedbackMessageElement.textContent = message;
+        if (type === 'success') {
+            feedbackMessageElement.style.color = '#28a745'; // Green for success
+        } else {
+            feedbackMessageElement.style.color = '#dc3545'; // Red for error
+        }
+        feedbackMessageElement.classList.add('show');
+        setTimeout(() => {
+          feedbackMessageElement.classList.remove('show');
+        }, 5000); // Hide after 5 seconds
+      }
+
+      document.addEventListener('DOMContentLoaded', () => {
+        initializeAnimations();
+
+        const resetPasswordBtn = document.getElementById('reset-password-btn');
+        const resetEmailInput = document.getElementById('reset-email');
+
+        resetPasswordBtn.addEventListener('click', async () => {
+          const email = resetEmailInput.value;
+
+          if (!email) {
+            showFeedbackMessage('Please enter your email address.', 'error');
+            return;
+          }
+
+          try {
+            await sendPasswordResetEmail(auth, email);
+            showFeedbackMessage('Password reset email sent! Check your inbox.', 'success');
+          } catch (error) {
+            let errorMessage = "An error occurred. Please try again.";
+            switch (error.code) {
+              case 'auth/invalid-email':
+                errorMessage = 'Invalid email address.';
+                break;
+              case 'auth/user-not-found':
+                errorMessage = 'No user found with that email address.';
+                break;
+              default:
+                errorMessage = 'Error sending password reset email. Please try again.';
+                console.error("Firebase Auth Error:", error.message);
+                break;
+            }
+            showFeedbackMessage(errorMessage, 'error');
+          }
+        });
+      });
+    </script>
+  </body>
+</html>

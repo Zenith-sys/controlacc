@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Zenith - Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+      /* Animações similares ao index.html */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes pulse {
+        0%, 100% {
+          transform: scale(1);
+        }
+        50% {
+          transform: scale(1.05);
+        }
+      }
+
+      @keyframes glow {
+        0%, 100% {
+          box-shadow: 0 0 20px rgba(12, 127, 242, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 30px rgba(12, 127, 242, 0.6);
+        }
+      }
+
+      /* Classes de animação */
+      .animate-fade-in-up {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      .animate-fade-in-down {
+        animation: fadeInDown 0.8s ease-out forwards;
+      }
+
+      .animate-slide-in-left {
+        animation: slideInLeft 0.8s ease-out forwards;
+      }
+
+      .animate-delay-1 {
+        animation-delay: 0.2s;
+      }
+
+      .animate-delay-2 {
+        animation-delay: 0.4s;
+      }
+
+      .animate-delay-3 {
+        animation-delay: 0.6s;
+      }
+
+      .animate-delay-4 {
+        animation-delay: 0.8s;
+      }
+
+      /* Inicialmente ocultos para animação */
+      .fade-element {
+        opacity: 0;
+      }
+
+      /* Profile picture hover effect */
+      .profile-picture-container {
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .profile-picture-container:hover {
+        transform: scale(1.05);
+      }
+
+      .profile-picture-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+        cursor: pointer;
+      }
+
+      .profile-picture-container:hover .profile-picture-overlay {
+        opacity: 1;
+      }
+
+      /* Form inputs with animations */
+      .form-input {
+        transition: all 0.3s ease;
+        background: rgba(240, 242, 245, 0.8);
+        backdrop-filter: blur(10px);
+      }
+
+      .form-input:focus {
+        transform: scale(1.02);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 8px 25px rgba(12, 127, 242, 0.15);
+      }
+
+      /* Buttons with hover effects */
+      .btn-primary {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #0c7ff2, #0a6bd8);
+      }
+
+      .btn-primary:hover {
+        transform: translateY(-2px);
+        animation: glow 2s infinite;
+      }
+
+      .btn-primary::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(
+          90deg,
+          transparent,
+          rgba(255, 255, 255, 0.2),
+          transparent
+        );
+        transition: left 0.5s;
+      }
+
+      .btn-primary:hover::before {
+        left: 100%;
+      }
+
+      .btn-danger {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #dc3545, #c82333);
+      }
+
+      .btn-danger:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
+      }
+
+      /* Card container */
+      .profile-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .profile-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Theme support */
+      .dark-theme {
+        background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+        color: white;
+      }
+
+      .dark-theme .profile-card {
+        background: rgba(0, 0, 0, 0.3);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .dark-theme .form-input {
+        background: rgba(40, 40, 40, 0.8);
+        color: white;
+      }
+
+      .dark-theme .form-input:focus {
+        background: rgba(60, 60, 60, 0.9);
+      }
+    </style>
+  </head>
+  <body class="transition-all duration-500">
+    <div
+      class="relative flex size-full min-h-screen flex-col bg-gradient-to-br from-blue-50 to-indigo-100 group/design-root overflow-x-hidden transition-all duration-500"
+      style='font-family: Inter, "Noto Sans", sans-serif;'
+      id="main-container"
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <div id="topbar-placeholder"></div>
+
+        <div class="px-4 md:px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col w-full max-w-4xl">
+            <!-- Welcome Header -->
+            <div class="fade-element animate-fade-in-down text-center mb-8">
+              <h2 class="text-[#111418] tracking-light text-[32px] font-bold leading-tight pb-3 pt-5">
+                Welcome to Dashboard!
+              </h2>
+              <p class="text-[#60758a] text-lg">Manage your profile and settings</p>
+            </div>
+
+            <!-- Profile Card -->
+            <div class="fade-element animate-fade-in-up animate-delay-1 profile-card p-8 mb-6">
+              <div class="flex flex-col items-center gap-6">
+                <!-- Profile Picture Section -->
+                <div class="profile-picture-container">
+                  <div
+                    id="profile-picture"
+                    class="bg-center bg-no-repeat aspect-square bg-cover rounded-full size-32 border-4 border-white shadow-lg"
+                    style='background-image: url("https://via.placeholder.com/128");'
+                  ></div>
+                  <div class="profile-picture-overlay" id="profile-picture-overlay">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="white" viewBox="0 0 256 256">
+                      <path d="M208,56H180.28L166.65,35.56A8,8,0,0,0,160,32H96a8,8,0,0,0-6.65,3.56L75.72,56H48A24,24,0,0,0,24,80V192a24,24,0,0,0,24,24H208a24,24,0,0,0,24-24V80A24,24,0,0,0,208,56ZM128,168a36,36,0,1,1,36-36A36,36,0,0,1,128,168Z"></path>
+                    </svg>
+                  </div>
+                </div>
+
+                <!-- Hidden file input -->
+                <input type="file" id="photo-input" accept="image/*" style="display: none;">
+
+                <!-- User Info -->
+                <div class="text-center">
+                  <p id="user-email" class="text-[#111418] text-xl font-semibold leading-normal mb-2">
+                    Loading...
+                  </p>
+                  <p class="text-[#60758a] text-sm">Click on your photo to update it</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Profile Description Section -->
+            <div class="fade-element animate-slide-in-left animate-delay-2 profile-card p-6 mb-6">
+              <h3 class="text-[#111418] text-lg font-bold mb-4">About Me</h3>
+              <div class="space-y-4">
+                <div>
+                  <label class="block text-[#111418] text-sm font-medium mb-2">Description</label>
+                  <textarea
+                    id="user-description"
+                    placeholder="Tell us about yourself..."
+                    class="form-input w-full min-h-[100px] resize-none rounded-lg text-[#111418] focus:outline-0 focus:ring-0 border-none p-4 text-base font-normal leading-normal"
+                    maxlength="500"
+                  ></textarea>
+                  <div class="text-right text-xs text-[#60758a] mt-1">
+                    <span id="char-count">0</span>/500
+                  </div>
+                </div>
+                <button
+                  id="save-description-btn"
+                  class="btn-primary flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-10 px-6 text-white text-sm font-bold leading-normal tracking-[0.015em]"
+                >
+                  <span class="truncate">Save Description</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Actions Section -->
+            <div class="fade-element animate-fade-in-up animate-delay-3 grid md:grid-cols-2 gap-4">
+              <div class="profile-card p-6">
+                <h3 class="text-[#111418] text-lg font-bold mb-4">Quick Actions</h3>
+                <div class="space-y-3">
+                  <a href="settings.html" class="block">
+                    <button class="btn-primary w-full flex items-center justify-center gap-2 rounded-lg h-10 px-4 text-white text-sm font-medium">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M128,80a48,48,0,1,0,48,48A48.05,48.05,0,0,0,128,80Zm0,80a32,32,0,1,1,32-32A32,32,0,0,1,128,160Zm88-29.84q.06-2.16,0-4.32l14.92-18.64a8,8,0,0,0,1.48-7.06,107.21,107.21,0,0,0-10.88-26.25,8,8,0,0,0-6-3.93l-23.72-2.64q-1.48-1.56-3.18-3.18L186.05,40.54a8,8,0,0,0-3.93-6,107.71,107.71,0,0,0-26.25-10.87,8,8,0,0,0-7.06,1.49L130.16,40Q128,40,125.84,40L107.2,25.11a8,8,0,0,0-7.06-1.48A107.6,107.6,0,0,0,73.89,34.51a8,8,0,0,0-3.93,6L67.32,64.27q-1.56,1.49-3.18,3.18L40.54,69.94a8,8,0,0,0-6,3.93,107.71,107.71,0,0,0-10.87,26.25,8,8,0,0,0,1.49,7.06L40,125.84Q40,128,40,130.16L25.11,148.8a8,8,0,0,0-1.48,7.06,107.21,107.21,0,0,0,10.88,26.25,8,8,0,0,0,6,3.93l23.72,2.64q1.48,1.56,3.18,3.18L69.05,215.46a8,8,0,0,0,3.93,6,107.71,107.71,0,0,0,26.25,10.87,8,8,0,0,0,7.06-1.49L125.84,216q2.16.06,4.32,0l18.64,14.92a8,8,0,0,0,7.06,1.48,107.21,107.21,0,0,0,26.25-10.88,8,8,0,0,0,3.93-6l2.64-23.72q1.56-1.48,3.18-3.18L215.46,187a8,8,0,0,0,6-3.93,107.71,107.71,0,0,0,10.87-26.25,8,8,0,0,0-1.49-7.06ZM128,176a48,48,0,1,1,48-48A48.05,48.05,0,0,1,128,176Z"></path>
+                      </svg>
+                      Settings
+                    </button>
+                  </a>
+                  <a href="support.html" class="block">
+                    <button class="btn-primary w-full flex items-center justify-center gap-2 rounded-lg h-10 px-4 text-white text-sm font-medium">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                        <path d="M140,180a12,12,0,1,1-12-12A12,12,0,0,1,140,180ZM128,72c-22.06,0-40,16.15-40,36v4a8,8,0,0,0,16,0v-4c0-11,10.77-20,24-20s24,9,24,20-10.77,20-24,20a8,8,0,0,0-8,8v8a8,8,0,0,0,16,0v-.72c18.24-3.35,32-17.9,32-35.28C168,88.15,150.06,72,128,72Zm104,56A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z"></path>
+                      </svg>
+                      Support
+                    </button>
+                  </a>
+                </div>
+              </div>
+
+              <div class="profile-card p-6">
+                <h3 class="text-[#111418] text-lg font-bold mb-4">Account</h3>
+                <button
+                  id="logout-btn"
+                  class="btn-danger w-full flex items-center justify-center gap-2 rounded-lg h-10 px-4 text-white text-sm font-medium"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256">
+                    <path d="M112,216a8,8,0,0,1-8,8H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h56a8,8,0,0,1,0,16H48V208h56A8,8,0,0,1,112,216Zm109.66-93.66-40-40a8,8,0,0,0-11.32,11.32L196.69,120H104a8,8,0,0,0,0,16h92.69l-26.35,26.34a8,8,0,0,0,11.32,11.32l40-40A8,8,0,0,0,221.66,122.34Z"></path>
+                  </svg>
+                  Sign Out
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module">
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+      import { 
+        getAuth, 
+        onAuthStateChanged, 
+        signOut 
+      } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+      import { 
+        getFirestore, 
+        doc, 
+        setDoc, 
+        getDoc, 
+        updateDoc 
+      } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-firestore.js";
+      import { 
+        getStorage, 
+        ref, 
+        uploadBytes, 
+        getDownloadURL 
+      } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-storage.js";
+
+      const firebaseConfig = {
+        apiKey: "AIzaSyBOaX0w3QCpLkuaAp7XNYspZkCxxu2sklA",
+        authDomain: "znotes-94da5ec4.firebaseapp.com",
+        projectId: "znotes-94da5ec4",
+        storageBucket: "znotes-94da5ec4.firebasestorage.app",
+        messagingSenderId: "886687981244",
+        appId: "1:886687981244:web:a56fe5db902a2f9d7f7ab9",
+      };
+
+      const app = initializeApp(firebaseConfig);
+      const auth = getAuth(app);
+      const db = getFirestore(app);
+      const storage = getStorage(app);
+
+      let currentUser = null;
+
+      // Load theme preference
+      function loadTheme() {
+        const theme = localStorage.getItem('theme') || 'light';
+        if (theme === 'dark') {
+          document.body.classList.add('dark-theme');
+          document.getElementById('main-container').className = 
+            'relative flex size-full min-h-screen flex-col bg-gradient-to-br from-gray-900 to-gray-800 group/design-root overflow-x-hidden transition-all duration-500';
+        }
+      }
+
+      // Load topbar
+      async function loadTopbar() {
+        try {
+          const response = await fetch("topbar.html");
+          const data = await response.text();
+          document.getElementById("topbar-placeholder").innerHTML = data;
+        } catch (error) {
+          console.error("Erro ao carregar a top bar:", error);
+        }
+      }
+
+      // Initialize animations
+      function initializeAnimations() {
+        const fadeElements = document.querySelectorAll('.fade-element');
+        fadeElements.forEach((element, index) => {
+          setTimeout(() => {
+            element.style.opacity = '1';
+          }, index * 200);
+        });
+      }
+
+      // Load user profile data
+      async function loadUserProfile(user) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            const data = userDoc.data();
+            
+            // Load profile picture
+            if (data.photoURL) {
+              document.getElementById('profile-picture').style.backgroundImage = `url('${data.photoURL}')`;
+            }
+            
+            // Load description
+            if (data.description) {
+              document.getElementById('user-description').value = data.description;
+              updateCharCount();
+            }
+          }
+        } catch (error) {
+          console.error("Error loading user profile:", error);
+        }
+      }
+
+      // Save user profile data
+      async function saveUserProfile(data) {
+        try {
+          await updateDoc(doc(db, 'users', currentUser.uid), data);
+          showNotification('Profile updated successfully!', 'success');
+        } catch (error) {
+          console.error("Error saving profile:", error);
+          showNotification('Error updating profile', 'error');
+        }
+      }
+
+      // Upload profile picture
+      async function uploadProfilePicture(file) {
+        try {
+          const storageRef = ref(storage, `profile-pictures/${currentUser.uid}`);
+          const snapshot = await uploadBytes(storageRef, file);
+          const downloadURL = await getDownloadURL(snapshot.ref);
+          
+          await saveUserProfile({ photoURL: downloadURL });
+          document.getElementById('profile-picture').style.backgroundImage = `url('${downloadURL}')`;
+          
+          return downloadURL;
+        } catch (error) {
+          console.error("Error uploading image:", error);
+          showNotification('Error uploading image', 'error');
+        }
+      }
+
+      // Show notification
+      function showNotification(message, type = 'info') {
+        const notification = document.createElement('div');
+        notification.className = `fixed top-4 right-4 z-50 p-4 rounded-lg text-white font-medium transform translate-x-full transition-transform duration-300 ${
+          type === 'success' ? 'bg-green-500' : 
+          type === 'error' ? 'bg-red-500' : 'bg-blue-500'
+        }`;
+        notification.textContent = message;
+        
+        document.body.appendChild(notification);
+        
+        setTimeout(() => notification.classList.remove('translate-x-full'), 100);
+        setTimeout(() => {
+          notification.classList.add('translate-x-full');
+          setTimeout(() => document.body.removeChild(notification), 300);
+        }, 3000);
+      }
+
+      // Update character count
+      function updateCharCount() {
+        const textarea = document.getElementById('user-description');
+        const count = document.getElementById('char-count');
+        count.textContent = textarea.value.length;
+      }
+
+      // Event listeners
+      window.addEventListener('load', () => {
+        loadTheme();
+        loadTopbar();
+        initializeAnimations();
+      });
+
+      // Profile picture click
+      document.getElementById('profile-picture-overlay').addEventListener('click', () => {
+        document.getElementById('photo-input').click();
+      });
+
+      // File input change
+      document.getElementById('photo-input').addEventListener('change', async (e) => {
+        const file = e.target.files[0];
+        if (file && currentUser) {
+          if (file.size > 5 * 1024 * 1024) { // 5MB limit
+            showNotification('File size must be less than 5MB', 'error');
+            return;
+          }
+          
+          if (!file.type.startsWith('image/')) {
+            showNotification('Please select an image file', 'error');
+            return;
+          }
+          
+          showNotification('Uploading image...', 'info');
+          await uploadProfilePicture(file);
+        }
+      });
+
+      // Description character count
+      document.getElementById('user-description').addEventListener('input', updateCharCount);
+
+      // Save description
+      document.getElementById('save-description-btn').addEventListener('click', async () => {
+        if (currentUser) {
+          const description = document.getElementById('user-description').value;
+          await saveUserProfile({ description });
+        }
+      });
+
+      // Logout button
+      document.getElementById('logout-btn').addEventListener('click', () => {
+        signOut(auth)
+          .then(() => {
+            localStorage.removeItem('userEmail');
+            window.location.href = "index.html";
+          })
+          .catch((error) => {
+            showNotification('Error signing out', 'error');
+          });
+      });
+
+      // Auth state listener
+      onAuthStateChanged(auth, async (user) => {
+        const userEmailElement = document.getElementById("user-email");
+
+        if (user) {
+          currentUser = user;
+          userEmailElement.textContent = user.email;
+          localStorage.setItem('userEmail', user.email);
+          
+          // Create user document if it doesn't exist
+          try {
+            const userDocRef = doc(db, 'users', user.uid);
+            const userDoc = await getDoc(userDocRef);
+            
+            if (!userDoc.exists()) {
+              await setDoc(userDocRef, {
+                email: user.email,
+                createdAt: new Date(),
+                photoURL: '',
+                description: ''
+              });
+            }
+            
+            await loadUserProfile(user);
+          } catch (error) {
+            console.error("Error setting up user document:", error);
+          }
+        } else {
+          window.location.href = "index.html";
+        }
+      });
+    </script>
+  </body>
+</html>

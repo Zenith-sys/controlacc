@@ -1,0 +1,173 @@
+<header
+  class="flex items-center justify-between whitespace-nowrap border-b border-solid border-b-[#f0f2f5] px-10 py-3"
+>
+  <div class="flex items-center gap-4 text-[#111518]">
+    <a href="dashboard.html" class="flex items-center gap-2">
+      <div class="size-6">
+        <img src="zlogo.png" alt="Zenith Logo" class="h-full w-full object-contain" />
+        </div>
+      <h2 class="text-[#111518] text-lg font-bold leading-tight tracking-[-0.015em]">
+        Zenith
+      </h2>
+    </a>
+  </div>
+  <div class="flex flex-1 justify-end gap-8">
+    <div class="flex items-center gap-9">
+      <a class="text-[#111518] text-sm font-medium leading-normal" href="dashboard.html"
+        >Dashboard</a
+      >
+      <a class="text-[#111518] text-sm font-medium leading-normal" href="settings.html"
+        >Settings</a
+      >
+      <a class="text-[#111518] text-sm font-medium leading-normal" href="support.html"
+        >Support</a
+      >
+    </div>
+
+    <div class="relative">
+      <button
+        id="profileMenuButton"
+        class="flex size-10 cursor-pointer items-center justify-center overflow-hidden rounded-full bg-[#f0f2f5] text-[#111518] text-sm font-bold leading-normal"
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          width="24"
+          height="24"
+          fill="currentColor"
+          viewBox="0 0 256 256"
+        >
+          <path
+            d="M232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128ZM128,40a88,88,0,1,0,88,88A88.1,88.1,0,0,0,128,40Zm-40,128a8,8,0,0,0-8,8,32,32,0,0,0,64,0,8,8,0,0,0-8-8ZM128,152a40,40,0,1,0-40-40A40,40,0,0,0,128,152Zm0-64a24,24,0,1,1-24,24A24,24,0,0,1,128,88Z"
+          ></path>
+        </svg>
+      </button>
+
+      <div
+        id="profileMenu"
+        class="absolute right-0 mt-2 w-72 rounded-md shadow-lg bg-gray-800 text-white ring-1 ring-black ring-opacity-5 focus:outline-none hidden z-50"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="profileMenuButton"
+      >
+        <div class="py-2 px-4 border-b border-gray-700">
+          <p class="text-sm font-semibold">User Name</p>
+          <p id="menuUserEmail" class="text-xs text-gray-400"></p>
+        </div>
+
+        <div class="py-1" role="none">
+          <a
+            href="settings.html"
+            class="text-gray-200 block px-4 py-2 text-sm hover:bg-gray-700 flex items-center gap-2"
+            role="menuitem"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M232,128a8,8,0,0,1-8,8H200v24a16,16,0,0,1-16,16H160a16,16,0,0,1-16-16V136H112v24a16,16,0,0,1-16,16H80a16,16,0,0,1-16-16V136H32a8,8,0,0,1,0-16H64V96a16,16,0,0,1,16-16h16a16,16,0,0,1,16,16v24h32V96a16,16,0,0,1,16-16h16a16,16,0,0,1,16,16v24h24A8,8,0,0,1,232,128ZM112,120V96h32v24Zm-32,0V96H96v24Zm80,0V96h16v24Z"></path></svg>
+            Settings</a
+          >
+          <a
+            href="#"
+            class="text-gray-200 block px-4 py-2 text-sm hover:bg-gray-700 flex items-center gap-2"
+            role="menuitem"
+            >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M184,40H72A40,40,0,0,0,32,80V176a40,40,0,0,0,40,40H184a40,40,0,0,0,40-40V80A40,40,0,0,0,184,40ZM176,128h-8V96a8,8,0,0,0-16,0v32H128V96a8,8,0,0,0-16,0v32H96V96a8,8,0,0,0-16,0v32H72a8,8,0,0,0,0,16H80v32a8,8,0,0,0,16,0V144h16v32a8,8,0,0,0,16,0V144h16v32a8,8,0,0,0,16,0V144h8a8,8,0,0,0,0-16Z"></path></svg>
+            Get mobile app</a
+          >
+          <div class="border-t border-gray-700 my-1" role="none"></div>
+          <form method="POST" action="#" role="none">
+            <button
+              type="button"
+              id="logoutTopbarBtn"
+              class="text-gray-200 block w-full text-left px-4 py-2 text-sm hover:bg-gray-700 flex items-center gap-2"
+              role="menuitem"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" viewBox="0 0 256 256"><path d="M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm-8,128a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48-16V104a8,8,0,0,1,16,0v40a8,8,0,0,1-16,0Z"></path></svg>
+              Log out
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</header>
+
+<script type="module">
+  import { getAuth, signOut } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-auth.js";
+
+  // Esta parte do script é para o menu de perfil e deve estar no topbar.html
+  // IMPORTANTE: Este listener só será adicionado se o script for processado *depois* do HTML ser adicionado ao DOM.
+  // Se topbar.html for injetado via fetch/innerHTML, o script dentro dele PODE não executar automaticamente.
+  document.addEventListener("DOMContentLoaded", () => {
+    console.log("topbar.html: DOMContentLoaded fired."); // Debugging
+    const profileMenuButton = document.getElementById("profileMenuButton");
+    const profileMenu = document.getElementById("profileMenu");
+    const logoutTopbarBtn = document.getElementById("logoutTopbarBtn");
+    const menuUserEmailElement = document.getElementById("menuUserEmail");
+
+    if (!profileMenuButton) {
+      console.error("topbar.html: profileMenuButton not found!"); // Debugging
+      return; // Sair se o botão não for encontrado
+    }
+    if (!profileMenu) {
+      console.error("topbar.html: profileMenu not found!"); // Debugging
+      return; // Sair se o menu não for encontrado
+    }
+
+    // Toggle do menu de perfil
+    profileMenuButton.addEventListener("click", (event) => {
+      console.log("topbar.html: profileMenuButton clicked!"); // Debugging
+      event.stopPropagation(); // Impede que o clique no botão feche o menu imediatamente
+      profileMenu.classList.toggle("hidden");
+    });
+
+    // Fechar o menu se clicar fora dele
+    document.addEventListener("click", (event) => {
+      if (
+        !profileMenuButton.contains(event.target) &&
+        !profileMenu.contains(event.target)
+      ) {
+        profileMenu.classList.add("hidden");
+      }
+    });
+
+    // Função para atualizar o email no menu
+    const updateMenuUserInfo = (userEmail) => {
+      if (menuUserEmailElement) {
+        menuUserEmailElement.textContent = userEmail || "No email available";
+      }
+    };
+
+    // Obter o email do usuário do localStorage (salvo durante o login)
+    const storedEmail = localStorage.getItem('userEmail');
+    if (storedEmail) {
+      updateMenuUserInfo(storedEmail);
+    } else {
+      const authInstance = getAuth();
+      if (authInstance.currentUser) {
+          updateMenuUserInfo(authInstance.currentUser.email);
+          localStorage.setItem('userEmail', authInstance.currentUser.email);
+      } else {
+          updateMenuUserInfo("Guest User");
+      }
+    }
+
+    // Lógica de Logout para o botão no menu
+    if (logoutTopbarBtn) {
+      logoutTopbarBtn.addEventListener("click", () => {
+        const authInstance = getAuth();
+        if (authInstance) {
+          signOut(authInstance)
+            .then(() => {
+              localStorage.removeItem('userEmail');
+              window.location.href = "index.html";
+            })
+            .catch((error) => {
+              console.error("Erro ao fazer logout da topbar:", error);
+              alert("Erro ao fazer logout.");
+            });
+        } else {
+          console.error("Firebase Auth não está inicializado para logout na topbar.");
+          alert("Não foi possível fazer logout. Tente novamente.");
+        }
+      });
+    }
+  });
+</script>

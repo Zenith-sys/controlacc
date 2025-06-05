@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin="" />
+    <link
+      rel="stylesheet"
+      as="style"
+      onload="this.rel='stylesheet'"
+      href="https://fonts.googleapis.com/css2?display=swap&family=Inter%3Awght%40400%3B500%3B700%3B900&family=Noto+Sans%3Awght%40400%3B500%3B700%3B900"
+    />
+
+    <title>Zenith - Support</title>
+    <link rel="icon" type="image/x-icon" href="data:image/x-icon;base64," />
+
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <style>
+      /* Animações similares ao index.html */
+      @keyframes fadeInUp {
+        from {
+          opacity: 0;
+          transform: translateY(30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes fadeInDown {
+        from {
+          opacity: 0;
+          transform: translateY(-30px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      @keyframes slideInLeft {
+        from {
+          opacity: 0;
+          transform: translateX(-50px);
+        }
+        to {
+          opacity: 1;
+          transform: translateX(0);
+        }
+      }
+
+      @keyframes glow {
+        0%, 100% {
+          box-shadow: 0 0 20px rgba(12, 127, 242, 0.3);
+        }
+        50% {
+          box-shadow: 0 0 30px rgba(12, 127, 242, 0.6);
+        }
+      }
+
+      /* Classes de animação */
+      .animate-fade-in-up {
+        animation: fadeInUp 0.8s ease-out forwards;
+      }
+
+      .animate-fade-in-down {
+        animation: fadeInDown 0.8s ease-out forwards;
+      }
+
+      .animate-slide-in-left {
+        animation: slideInLeft 0.8s ease-out forwards;
+      }
+
+      .animate-delay-1 {
+        animation-delay: 0.2s;
+      }
+
+      .animate-delay-2 {
+        animation-delay: 0.4s;
+      }
+
+      .animate-delay-3 {
+        animation-delay: 0.6s;
+      }
+
+      .animate-delay-4 {
+        animation-delay: 0.8s;
+      }
+
+      /* Inicialmente ocultos para animação */
+      .fade-element {
+        opacity: 0;
+      }
+
+      /* Form inputs with animations */
+      .form-input {
+        transition: all 0.3s ease;
+        background: rgba(240, 242, 245, 0.8);
+        backdrop-filter: blur(10px);
+      }
+
+      .form-input:focus {
+        transform: scale(1.02);
+        background: rgba(255, 255, 255, 0.9);
+        box-shadow: 0 8px 25px rgba(12, 127, 242, 0.15);
+      }
+
+      /* Support card */
+      .support-card {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(20px);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 20px;
+        box-shadow: 0 20px 60px rgba(0, 0, 0, 0.1);
+        transition: all 0.3s ease;
+      }
+
+      .support-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 30px 80px rgba(0, 0, 0, 0.15);
+      }
+
+      /* Button with hover effect */
+      .support-btn {
+        position: relative;
+        overflow: hidden;
+        transition: all 0.3s ease;
+        background: linear-gradient(135deg, #0c7ff2, #0a6bd8);
+      }
+
+      .support-btn:hover {
+        transform: translateY(-2px);
+        animation: glow 2s infinite;
+      }
+
+      .support-btn::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+        transition: left 0.5s;
+      }
+
+      .support-btn:hover::before {
+        left: 100%;
+      }
+
+      /* Success Message */
+      .success-message {
+        display: none;
+        background-color: #d1fae5; /* Green 100 */
+        color: #065f46; /* Green 800 */
+        padding: 1rem;
+        border-radius: 0.5rem;
+        margin-top: 1rem;
+        text-align: center;
+        opacity: 0;
+        transition: opacity 0.5s ease-out;
+      }
+
+      .success-message.show {
+        opacity: 1;
+        display: block;
+      }
+    </style>
+  </head>
+<body class="bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div
+      class="relative flex size-full min-h-screen flex-col group/design-root overflow-x-hidden"
+      style='font-family: Inter, "Noto Sans", sans-serif;'
+    >
+      <div class="layout-container flex h-full grow flex-col">
+        <div id="topbar-placeholder"></div>
+
+        <div class="px-4 md:px-40 flex flex-1 justify-center py-5">
+          <div class="layout-content-container flex flex-col max-w-[960px] flex-1">
+            <div class="fade-element animate-fade-in-down text-center mb-8">
+              <h2 class="text-[#111518] tracking-light text-[32px] font-bold leading-tight pb-3">
+                Zenith Support
+              </h2>
+              <p class="text-[#60768a] text-lg">How can we help you?</p>
+            </div>
+
+            <div class="fade-element animate-fade-in-up animate-delay-1 support-card p-8">
+              <form id="supportForm" class="space-y-6">
+                <div>
+                  <label class="block text-[#111518] text-sm font-medium mb-2">Subject</label>
+                  <input
+                    type="text"
+                    id="subject"
+                    class="form-input w-full rounded-lg text-[#111518] focus:outline-0 focus:ring-0 border-none p-4 text-base font-normal leading-normal"
+                    placeholder="What's your question about?"
+                    required
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-[#111518] text-sm font-medium mb-2">Message</label>
+                  <textarea
+                    id="message"
+                    class="form-input w-full min-h-[200px] resize-none rounded-lg text-[#111518] focus:outline-0 focus:ring-0 border-none p-4 text-base font-normal leading-normal"
+                    placeholder="Describe your problem or question here..."
+                    required
+                  ></textarea>
+                  <div class="text-right text-xs text-[#60768a] mt-1">
+                    <span id="char-count">0</span>/1000
+                  </div>
+                </div>
+
+                <button
+                  type="submit"
+                  class="support-btn flex min-w-[120px] cursor-pointer items-center justify-center overflow-hidden rounded-lg h-12 px-6 text-white text-base font-bold leading-normal tracking-[0.015em]"
+                >
+                  <span class="truncate">Submit Request</span>
+                </button>
+              </form>
+              <div id="successMessage" class="success-message">
+                Your message has been sent successfully! An email client has been opened to complete the submission.
+              </div>
+            </div>
+
+            <div class="fade-element animate-slide-in-left animate-delay-2 mt-8 text-center">
+              <p class="text-[#111518] text-base font-normal leading-normal">
+                You can contact us directly at:
+              </p>
+              <p class="text-[#0c7ff2] text-lg font-medium mt-2">
+                zenith_enterprise@proton.me
+              </p>
+
+              <div class="mt-6">
+                <h3 class="text-[#111518] text-lg font-bold mb-3">Useful Links</h3>
+                <div class="flex justify-center space-x-4">
+                  <a href="https://zenithsys.featurebase.app/en" target="_blank" class="text-[#0c7ff2] hover:underline">FAQs</a>
+                  <a href="https://discord.gg/BS38MXyb" target="_blank" class="text-[#0c7ff2] hover:underline">Discord</a>
+                  <a href="https://x.com/app_zenith" target="_blank" class="text-[#0c7ff2] hover:underline">Twitter</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      // Load topbar
+      async function loadTopbar() {
+        try {
+          const response = await fetch("topbar.html");
+          const data = await response.text();
+          document.getElementById("topbar-placeholder").innerHTML = data;
+        } catch (error) {
+          console.error("Error loading topbar:", error);
+        }
+      }
+
+      // Initialize animations
+      function initializeAnimations() {
+        const fadeElements = document.querySelectorAll('.fade-element');
+        fadeElements.forEach((element) => {
+          element.style.opacity = '1';
+        });
+      }
+
+      // Character count
+      const messageArea = document.getElementById('message');
+      const charCount = document.getElementById('char-count');
+
+      messageArea.addEventListener('input', () => {
+        const count = messageArea.value.length;
+        charCount.textContent = count;
+        
+        if (count > 1000) {
+          messageArea.value = messageArea.value.substring(0, 1000);
+          charCount.textContent = '1000';
+        }
+      });
+
+      // Handle form submission
+      document.getElementById('supportForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        
+        const subject = document.getElementById('subject').value;
+        const message = document.getElementById('message').value;
+        
+        // Create mailto link with form data
+        const mailtoLink = `mailto:zenith_enterprise@proton.me?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+        
+        // Show success message
+        const successMessage = document.getElementById('successMessage');
+        successMessage.classList.add('show');
+
+        // Hide success message after 5 seconds
+        setTimeout(() => {
+          successMessage.classList.remove('show');
+        }, 5000);
+
+        // Open email client
+        window.location.href = mailtoLink;
+      });
+
+      // Initialize when page loads
+      document.addEventListener('DOMContentLoaded', () => {
+        loadTopbar();
+        initializeAnimations();
+      });
+    </script>
+  </body>
+</html>

@@ -1,7 +1,7 @@
 # 🚀 ControlAcc: User Account Management System  
 
-![Project Banner](https://via.placeholder.com/800x300/0c7ff2/FFFFFF?text=ControlAcc)  
-*A sleek dashboard for user account management and profile customization.*  
+
+
 
 ---
 
